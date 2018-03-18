@@ -167,10 +167,10 @@ class ServiceHandler extends SimpleRest {
         echo json_encode($response);
     }
 
-    function getArtiSchedule() {
+    function getCollegeStreams($college){
 
         $services = new Services();
-        $rawData = $services->getArtiSchedule();
+        $rawData = $services->getCollegeStreams($college);
 
 
         if (empty($rawData)) {

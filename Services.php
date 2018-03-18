@@ -109,6 +109,7 @@ Class Services {
 
         return $output;
     }
+
     public function getStudentsDocuments($student) {
         $dbconn = new dbconn();
         $output = array();
@@ -126,7 +127,7 @@ Class Services {
 
         return $output;
     }
-    
+
     public function getSMS() {
         $dbconn = new dbconn();
         $output = array();
@@ -201,16 +202,16 @@ Class Services {
         return $output;
     }
 
-    public function getAddresses() {
+    public function getCollegeStreams($college) {
         $dbconn = new dbconn();
         $output = array();
-        $sql = "SELECT * FROM address_register order by building,flat;";
+        $sql = "SELECT * FROM recomdb.college_streams where college_id=$college->id;";
         $conn = $dbconn->return_conn();
         $result = $conn->query($sql);
         if ($result->num_rows > 0) {
             // output data of each row
             while ($row = $result->fetch_assoc()) {
-                $output[] = array('id' => $row["id"], 'building' => $row["building"], 'flat' => $row["flat"]);
+                $output[] = $row;
             }
         }
 
@@ -218,7 +219,7 @@ Class Services {
         return $output;
     }
 
-    public function getTodaysDonations() {
+    public function searchCollege($filters) {
         $dbconn = new dbconn();
         $output = array();
         $sql = "SELECT * FROM gcsmm.donation_master where `on`=curdate();";

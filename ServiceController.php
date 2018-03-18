@@ -69,10 +69,10 @@ switch ($view) {
         $ServiceHandler = new ServiceHandler();
         $ServiceHandler->getStudentsDocuments($reqdata);
         break;
-    case "dateWiseDonations":
+    case "get college streams":
         // to handle REST Url /mobile/users/
         $ServiceHandler = new ServiceHandler();
-        $ServiceHandler->getSummaryFromDate($_GET["date"]);
+        $ServiceHandler->getCollegeStreams($reqdata);
         break;
     case "verify":
         // to handle REST Url /mobile/users/
