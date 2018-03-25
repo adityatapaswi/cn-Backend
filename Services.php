@@ -146,6 +146,24 @@ Class Services {
         return $output;
     }
 
+    public function searchCollege($query) {
+        $dbconn = new dbconn();
+        $output = array();
+        $sql = "select * from search_college where $query->condition;";
+        $conn = $dbconn->return_conn();
+        $result = $conn->query($sql);
+
+        if ($result->num_rows > 0) {
+            // output data of each row
+            while ($row = $result->fetch_assoc()) {
+                $output[] = $row;
+            }
+        }
+        $conn->close();
+
+        return $output;
+    }
+
     public function updateStudentProfile($student) {
         $dbconn = new dbconn();
 //        $output = array();
@@ -219,16 +237,16 @@ Class Services {
         return $output;
     }
 
-    public function searchCollege($filters) {
+    public function applyToCollege($application) {
         $dbconn = new dbconn();
         $output = array();
-        $sql = "SELECT * FROM gcsmm.donation_master where `on`=curdate();";
+        $sql = "call applyToCollege($application->stud_id, $application->college_id, $application->stream_id);";
         $conn = $dbconn->return_conn();
         $result = $conn->query($sql);
         if ($result->num_rows > 0) {
             // output data of each row
             while ($row = $result->fetch_assoc()) {
-                $output[] = array('by' => $row["payment_by"], 'to' => $row["to"], 'amt' => $row["amt"]);
+                $output = $row;
             }
         }
 

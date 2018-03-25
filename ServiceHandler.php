@@ -189,10 +189,10 @@ class ServiceHandler extends SimpleRest {
         echo json_encode($response);
     }
 
-    function registerResident($resident) {
+    function searchCollege($query) {
 
         $services = new Services();
-        $rawData = $services->registerResident($resident);
+        $rawData = $services->searchCollege($query);
 
 
         if (empty($rawData)) {
@@ -211,10 +211,10 @@ class ServiceHandler extends SimpleRest {
         echo json_encode($response);
     }
 
-    function verify($mobile) {
+    function applyToCollege($application) {
 
         $services = new Services();
-        $rawData = $services->verify($mobile);
+        $rawData = $services->applyToCollege($application);
 
 
         if (empty($rawData)) {

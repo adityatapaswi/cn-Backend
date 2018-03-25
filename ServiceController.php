@@ -74,15 +74,15 @@ switch ($view) {
         $ServiceHandler = new ServiceHandler();
         $ServiceHandler->getCollegeStreams($reqdata);
         break;
-    case "verify":
+    case "search college":
         // to handle REST Url /mobile/users/
         $ServiceHandler = new ServiceHandler();
-        $ServiceHandler->verify($_GET["mobile"]);
+        $ServiceHandler->searchCollege($reqdata);
         break;
-    case "loginResident":
+    case "apply to college":
         // to handle REST Url /mobile/users/
         $ServiceHandler = new ServiceHandler();
-        $ServiceHandler->loginResident($_GET["mobile"]);
+        $ServiceHandler->applyToCollege($reqdata);
         break;
     case "getDates":
         // to handle REST Url /mobile/users/
