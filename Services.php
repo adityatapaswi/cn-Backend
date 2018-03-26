@@ -254,21 +254,21 @@ Class Services {
         return $output;
     }
 
-    public function getArtiSchedule() {
+    public function getApplications($for) {
 
         $dbconn = new dbconn();
         $output = array();
-
-        $sql = "CALL artischedule();";
-
+        if ($for->type == 'student')
+            $sql = "SELECT * FROM applications where student_id=$for->id;";
+        else
+            $sql = "SELECT * FROM applications where college_id=$for->id;";
 //       echo $sql;
         $conn = $dbconn->return_conn();
         $conn->query("SET NAMES 'utf8'");
         $result = $conn->query($sql);
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
-
-                $output[] = array('days_remaining' => $row["days_remaining"], 'date' => $row["date"], 'buildings' => $row["buildings"], 'building_marathi' => $row["building_marathi"]);
+                $output[] = $row;
             }
         }
         $conn->close();
@@ -276,16 +276,16 @@ Class Services {
         return $output;
     }
 
-    public function getTodaysTotal() {
+    public function getStudentDetails($student) {
         $dbconn = new dbconn();
-        $output = array();
-        $sql = "SELECT sum(amt) as 'Total' FROM gcsmm.donation_master where `on`=curdate();";
+        $output=null;
+        $sql = "SELECT s.id, s.name,s.email,s.gender,s.dob,s.contact,s.max_qualification,s.percentage,s.major,s.city,s.state,s.zip, r.name as reservation FROM student_register s, reservation as r where r.id=s.rid and s.id=$student->id;";
         $conn = $dbconn->return_conn();
         $result = $conn->query($sql);
         if ($result->num_rows > 0) {
             // output data of each row
             while ($row = $result->fetch_assoc()) {
-                $output = $row["Total"];
+                $output = $row;
             }
         }
 
@@ -293,22 +293,20 @@ Class Services {
         return $output;
     }
 
-    public function getSummaryFromDate($date) {
+    public function updateApplicationStatus($application) {
         $dbconn = new dbconn();
-        $output = array();
-        $sql = "SELECT payment_by,id,amt FROM gcsmm.donation_master where `on` like '$date%' union all select '','Total',sum(amt) FROM gcsmm.donation_master where `on` like '$date%' order by id desc;";
+       
+        $sql = "update applications set status='$application->status' where id=$application->id;";
         $conn = $dbconn->return_conn();
         $result = $conn->query($sql);
-
-        if ($result->num_rows > 0) {
-            // output data of each row
-            while ($row = $result->fetch_assoc()) {
-
-                $output[] = array('by' => $row["payment_by"], 'to' => $row["id"], 'amt' => $row["amt"]);
-            }
-        }
         $conn->close();
-        return $output;
+        if($result)
+            return 'Status Updated Successfully';
+        else
+            return 'Updation Failed';
+        
+        
+        
     }
 
     public function getDatesForSummary() {

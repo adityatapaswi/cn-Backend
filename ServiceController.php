@@ -84,20 +84,20 @@ switch ($view) {
         $ServiceHandler = new ServiceHandler();
         $ServiceHandler->applyToCollege($reqdata);
         break;
-    case "getDates":
+    case "get applications":
         // to handle REST Url /mobile/users/
         $ServiceHandler = new ServiceHandler();
-        $ServiceHandler->getDatesForSummary();
+        $ServiceHandler->getApplications($reqdata);
         break;
-    case "getYears":
+    case "get student details":
         // to handle REST Url /mobile/users/
         $ServiceHandler = new ServiceHandler();
-        $ServiceHandler->getYearsForSummary();
+        $ServiceHandler->getStudentDetails($reqdata);
         break;
-    case "todaysTotal":
+    case "update application status":
         // to handle REST Url /mobile/users/
         $ServiceHandler = new ServiceHandler();
-        $ServiceHandler->getTodaysTotal();
+        $ServiceHandler->updateApplicationStatus($reqdata);
         break;
     case "yearsTotal":
         // to handle REST Url /mobile/users/

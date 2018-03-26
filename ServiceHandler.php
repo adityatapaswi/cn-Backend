@@ -233,10 +233,10 @@ class ServiceHandler extends SimpleRest {
         echo json_encode($response);
     }
 
-    function loginResident($mobile) {
+    function getApplications($for) {
 
         $services = new Services();
-        $rawData = $services->loginResident($mobile);
+        $rawData = $services->getApplications($for);
 
 
         if (empty($rawData)) {
@@ -255,10 +255,10 @@ class ServiceHandler extends SimpleRest {
         echo json_encode($response);
     }
 
-    function getBirthdaysAndAnniversaries() {
+    function getStudentDetails($student) {
 
         $services = new Services();
-        $rawData = $services->getBirthdaysAndAnniversaries();
+        $rawData = $services->getStudentDetails($student);
 
 
         if (empty($rawData)) {
@@ -278,10 +278,10 @@ class ServiceHandler extends SimpleRest {
         echo json_encode($response);
     }
 
-    function getAddresses() {
+    function updateApplicationStatus($application) {
 
         $services = new Services();
-        $rawData = $services->getAddresses();
+        $rawData = $services->updateApplicationStatus($application);
 
 
         if (empty($rawData)) {
