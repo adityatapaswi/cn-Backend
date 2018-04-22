@@ -300,10 +300,10 @@ class ServiceHandler extends SimpleRest {
         echo json_encode($response);
     }
 
-    function getTodaysDonations() {
+    function makePayment($paymentObj){
 
         $services = new Services();
-        $rawData = $services->getTodaysDonations();
+        $rawData = $services->makePayment($paymentObj);
 
 
         if (empty($rawData)) {
@@ -456,10 +456,9 @@ class ServiceHandler extends SimpleRest {
         echo json_encode($response);
     }
 
-    function addHistory($address) {
-
+    function completePayment($paymentObj) {
         $services = new Services();
-        $rawData = $services->addHistory($address);
+        $rawData = $services->completePayment($paymentObj);
 
 
         if (empty($rawData)) {
@@ -480,10 +479,10 @@ class ServiceHandler extends SimpleRest {
         echo json_encode($response);
     }
 
-    function getYearsTotal($year) {
+    function admitStudent($stud) {
 
         $services = new Services();
-        $rawData = $services->getYearsTotal($year);
+        $rawData = $services->admitStudent($stud);
 
 
         if (empty($rawData)) {

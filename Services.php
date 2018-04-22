@@ -278,7 +278,7 @@ Class Services {
 
     public function getStudentDetails($student) {
         $dbconn = new dbconn();
-        $output=null;
+        $output = null;
         $sql = "SELECT s.id, s.name,s.email,s.gender,s.dob,s.contact,s.max_qualification,s.percentage,s.major,s.city,s.state,s.zip, r.name as reservation FROM student_register s, reservation as r where r.id=s.rid and s.id=$student->id;";
         $conn = $dbconn->return_conn();
         $result = $conn->query($sql);
@@ -295,18 +295,15 @@ Class Services {
 
     public function updateApplicationStatus($application) {
         $dbconn = new dbconn();
-       
+
         $sql = "update applications set status='$application->status' where id=$application->id;";
         $conn = $dbconn->return_conn();
         $result = $conn->query($sql);
         $conn->close();
-        if($result)
+        if ($result)
             return 'Status Updated Successfully';
         else
             return 'Updation Failed';
-        
-        
-        
     }
 
     public function getDatesForSummary() {
@@ -420,14 +417,43 @@ Class Services {
         return $output;
     }
 
-    public function updateGCM($phone, $gcmId) {
+    public function makePayment($paymentObj) {
+        $ch = curl_init();
+
+        curl_setopt($ch, CURLOPT_URL, 'https://test.instamojo.com/api/1.1/payment-requests/');
+        curl_setopt($ch, CURLOPT_HEADER, FALSE);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array("X-Api-Key:test_313ce7ed5c23831c755f34228f6",
+            "X-Auth-Token:test_8407594df265ec78f711bfd2bee"));
+        $payload = Array(
+            'purpose' => $paymentObj->purpose,
+            'amount' => $paymentObj->amount,
+            'phone' => $paymentObj->phone,
+            'buyer_name' => $paymentObj->name,
+            'redirect_url' => 'http://localhost:8383/Career%20Navigator/index.html#/paymentRedirect',
+            'send_email' => true,
+            'webhook' => 'http://career-navigator.thesolutioncircle.in/api/webhook.php',
+            'send_sms' => true,
+            'email' => $paymentObj->email,
+            'allow_repeated_payments' => false
+        );
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($payload));
+        $response = curl_exec($ch);
+        curl_close($ch);
+
+        return $response;
+    }
+
+    public function admitStudent($stud) {
 
         $dbconn = new dbconn();
         $output = array();
 
-        $sql = "CALL updateFCM('$phone','$gcmId');";
+        $sql = "CALL admit_student($stud->student_id,$stud->college_id,$stud->stream_id,$stud->app_id,'$stud->pay_id');";
 
-        //  echo $sql;
+//        echo $sql;
         $conn = $dbconn->return_conn();
         $result = $conn->query($sql);
         if ($result->num_rows > 0) {
@@ -440,20 +466,19 @@ Class Services {
         return $output;
     }
 
-    public function addHistory($address) {
+    public function completePayment($paymentObj) {
 
         $dbconn = new dbconn();
         $output = array();
-
-        $sql = "CALL addHistory($address->aid, $address->year, $address->amt);";
+        $json = json_encode($paymentObj);
+//        echo $json;
+        $sql = "INSERT INTO payments (`amount`,`payed_by`,`purpose`,`purchase_token`,`payment_obj`,`payed_by_email`) VALUES('$paymentObj->amount','$paymentObj->buyer_name','$paymentObj->purpose','$paymentObj->payment_id','$json','$paymentObj->buyer');";
 
 //       echo $sql;
         $conn = $dbconn->return_conn();
         $result = $conn->query($sql);
-        if ($result->num_rows > 0) {
-            while ($row = $result->fetch_assoc()) {
-                $output = $row["reply"];
-            }
+        if ($result) {
+            $output = "Insertion Success";
         }
         $conn->close();
 

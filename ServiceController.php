@@ -2,19 +2,13 @@
 
 require_once("ServiceHandler.php");
 require_once("./SimpleRest.php");
-require_once("./util.php");
 
 $rest = new SimpleRest();
-$util=new util();
-//header("Access-Control-Allow-Origin: *");
 
 
 $view = "";
 parse_str(file_get_contents("php://input"), $reqdata);             
 $reqdata = (object) $reqdata;
-//$reqdata = file_get_contents("php://input");
-//$util->printLog($reqdata);
-//$reqdata  = json_decode($reqdata);
 
 if (isset($reqdata->view)){
     $view = $reqdata->view;
@@ -99,15 +93,15 @@ switch ($view) {
         $ServiceHandler = new ServiceHandler();
         $ServiceHandler->updateApplicationStatus($reqdata);
         break;
-    case "yearsTotal":
+    case "make payment":
         // to handle REST Url /mobile/users/
         $ServiceHandler = new ServiceHandler();
-        $ServiceHandler->getYearsTotal($_GET["year"]);
+        $ServiceHandler->makePayment($reqdata);
         break;
-    case "yearsSummary":
+    case "admit student":
         // to handle REST Url /mobile/users/
         $ServiceHandler = new ServiceHandler();
-        $ServiceHandler->getYearsSummary($_GET["year"]);
+        $ServiceHandler->admitStudent($reqdata);
         break;
     case "addressHistory":
         // to handle REST Url /mobile/users/
