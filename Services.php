@@ -306,10 +306,10 @@ Class Services {
             return 'Updation Failed';
     }
 
-    public function getDatesForSummary() {
+    public function getPaymentDetails($application) {
         $dbconn = new dbconn();
         $output = array();
-        $sql = "SELECT distinct(`on`) as date FROM gcsmm.donation_master order by `on` desc;";
+        $sql = "SELECT purchase_token FROM payments where id=(select payment_id from admissions where application_id=$application->id)";
         $conn = $dbconn->return_conn();
         $result = $conn->query($sql);
 
@@ -317,7 +317,7 @@ Class Services {
             // output data of each row
             while ($row = $result->fetch_assoc()) {
 
-                $output[] = array('date' => $row["date"]);
+                $output = $row;
             }
         }
         $conn->close();

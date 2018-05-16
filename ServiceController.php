@@ -103,10 +103,10 @@ switch ($view) {
         $ServiceHandler = new ServiceHandler();
         $ServiceHandler->admitStudent($reqdata);
         break;
-    case "addressHistory":
+    case "get payment details":
         // to handle REST Url /mobile/users/
         $ServiceHandler = new ServiceHandler();
-        $ServiceHandler->getHistoryOfAddress($_GET["aid"]);
+        $ServiceHandler->getPaymentDetails($reqdata);
         break;
     case "signup":
         // to handle REST Url /mobile/users/

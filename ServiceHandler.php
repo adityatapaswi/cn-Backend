@@ -17,7 +17,7 @@ class ServiceHandler extends SimpleRest {
             $response = array('Success' => false, 'Values' => $rawData);
         } else {
 //            echo $rawData["reply"];
-            if (isset( $rawData["reply"])) {
+            if (isset($rawData["reply"])) {
                 $statusCode = 401;
                 $response = array('Success' => false, 'Values' => $rawData["reply"]);
             } else {
@@ -56,6 +56,7 @@ class ServiceHandler extends SimpleRest {
 
         echo json_encode($response);
     }
+
     function getSMS() {
 
         $services = new Services();
@@ -123,6 +124,7 @@ class ServiceHandler extends SimpleRest {
 
         echo json_encode($response);
     }
+
     function getStudentsDocuments($student) {
 
         $services = new Services();
@@ -167,7 +169,7 @@ class ServiceHandler extends SimpleRest {
         echo json_encode($response);
     }
 
-    function getCollegeStreams($college){
+    function getCollegeStreams($college) {
 
         $services = new Services();
         $rawData = $services->getCollegeStreams($college);
@@ -300,7 +302,7 @@ class ServiceHandler extends SimpleRest {
         echo json_encode($response);
     }
 
-    function makePayment($paymentObj){
+    function makePayment($paymentObj) {
 
         $services = new Services();
         $rawData = $services->makePayment($paymentObj);
@@ -322,10 +324,10 @@ class ServiceHandler extends SimpleRest {
         echo json_encode($response);
     }
 
-    function getTodaysTotal() {
+    function getPaymentDetails($application) {
 
         $services = new Services();
-        $rawData = $services->getTodaysTotal();
+        $rawData = $services->getPaymentDetails($application);
 
 
         if (empty($rawData)) {
