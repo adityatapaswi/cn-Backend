@@ -128,10 +128,16 @@ Class Services {
         return $output;
     }
 
-    public function getSMS() {
+    public function getSMS($filter) {
         $dbconn = new dbconn();
         $output = array();
-        $sql = "select * from streams;";
+        if ($filter->type == 'major') {
+            $sql = "select distinct(major) as id,major as label from streams order by major;";
+        } else if ($filter->type == 'stream') {
+            $sql = "select distinct(stream_name) as id,stream_name as label from streams where FIND_IN_SET(streams.major,'$filter->majors' ) > 0 order by stream_name;";
+        } else {
+            $sql = "select distinct(specialization) as id,specialization as label from streams where FIND_IN_SET(streams.major,'$filter->majors' ) > 0 and FIND_IN_SET(streams.stream_name,'$filter->streams' ) > 0  order by specialization;";
+        }
         $conn = $dbconn->return_conn();
         $result = $conn->query($sql);
 
@@ -258,10 +264,11 @@ Class Services {
 
         $dbconn = new dbconn();
         $output = array();
-        if ($for->type == 'student')
+        if ($for->type == 'student') {
             $sql = "SELECT * FROM applications where student_id=$for->id;";
-        else
+        } else {
             $sql = "SELECT * FROM applications where college_id=$for->id;";
+        }
 //       echo $sql;
         $conn = $dbconn->return_conn();
         $conn->query("SET NAMES 'utf8'");
@@ -324,10 +331,10 @@ Class Services {
         return $output;
     }
 
-    public function getYearsForSummary() {
+    public function getAdmittedStatusForStudent($student) {
         $dbconn = new dbconn();
-        $output = array();
-        $sql = "SELECT distinct(year) FROM gcsmm.donation_history order by year desc;";
+        $output = false;
+        $sql = "SELECT * FROM admissions where student_id=$student->id;";
         $conn = $dbconn->return_conn();
         $result = $conn->query($sql);
 
@@ -335,23 +342,23 @@ Class Services {
             // output data of each row
             while ($row = $result->fetch_assoc()) {
 
-                $output[] = $row["year"];
+                $output = true;
             }
         }
         $conn->close();
         return $output;
     }
 
-    public function getYearsTotal($year) {
+    public function getStates() {
         $dbconn = new dbconn();
         $output = array();
-        $sql = "SELECT sum(amt) as Total FROM gcsmm.donation_history where year=$year;";
+        $sql = "SELECT distinct(state) as label,state as id  from college order by state;";
         $conn = $dbconn->return_conn();
         $result = $conn->query($sql);
         if ($result->num_rows > 0) {
             // output data of each row
             while ($row = $result->fetch_assoc()) {
-                $output = $row["Total"];
+                $output[] = $row;
             }
         }
 
@@ -359,16 +366,16 @@ Class Services {
         return $output;
     }
 
-    public function getYearsSummary($year) {
+    public function getCities($filter) {
         $dbconn = new dbconn();
         $output = array();
-        $sql = "SELECT concat(a.building,concat(', Flat/Block: ',a.flat)) as Address, b.amt FROM address_register as a,donation_history as b where b.aid=a.id and b.year=$year order by b.id desc;";
+        $sql = "SELECT distinct(city) as label,city as id FROM college WHERE FIND_IN_SET(college.state,'$filter->states' ) > 0 order by city;";
         $conn = $dbconn->return_conn();
         $result = $conn->query($sql);
         if ($result->num_rows > 0) {
             // output data of each row
             while ($row = $result->fetch_assoc()) {
-                $output[] = array('Address' => $row["Address"], 'amt' => $row["amt"]);
+                $output[] = $row;
             }
         }
 
@@ -376,10 +383,10 @@ Class Services {
         return $output;
     }
 
-    public function getHistoryOfAddress($aid) {
+    public function getStreamId($stream) {
         $dbconn = new dbconn();
         $output = array();
-        $sql = "SELECT concat(a.building,concat(' Flat No: ',a.flat)) as 'Address',b.year,b.amt FROM address_register as a, gcsmm.donation_history as b where  a.id=b.aid and b.aid=$aid order by b.year desc,b.id desc;";
+        $sql = "SELECT id FROM streams where major='$stream->major' and stream_name='$stream->stream' and specialization='$stream->spec';";
 //       echo $sql;
         $conn = $dbconn->return_conn();
 
@@ -387,7 +394,7 @@ Class Services {
         if ($result->num_rows > 0) {
             // output data of each row
             while ($row = $result->fetch_assoc()) {
-                $output[] = array('Address' => $row["Address"], 'Year' => $row["year"], 'amt' => $row["amt"]);
+                $output= $row;
             }
         }
 

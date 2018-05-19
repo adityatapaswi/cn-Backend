@@ -46,7 +46,7 @@ switch ($view) {
     case "get SMS":
         // to handle REST Url /mobile/users/
         $ServiceHandler = new ServiceHandler();
-        $ServiceHandler->getSMS();
+        $ServiceHandler->getSMS($reqdata);
         break;
     case "update student":
         // to handle REST Url /mobile/users/
@@ -108,35 +108,23 @@ switch ($view) {
         $ServiceHandler = new ServiceHandler();
         $ServiceHandler->getPaymentDetails($reqdata);
         break;
-    case "signup":
+    case "get admission status":
         // to handle REST Url /mobile/users/
 //       echo $user->name;
         $ServiceHandler = new ServiceHandler();
-        $ServiceHandler->signUp($reqdata);
+        $ServiceHandler->getAdmittedStatusForStudent($reqdata);
         break;
-    case "sendNotification":
-        // to handle REST Url /mobile/users/
-        $postdata = file_get_contents("php://input");
-        $notification = json_decode($postdata);
-        //   echo $notification->title.' '.$notification->message;
+    case "get states":
         $ServiceHandler = new ServiceHandler();
-        $ServiceHandler->sendNotification($notification);
+        $ServiceHandler->getStates();
         break;
-    case "registerResident":
-        // to handle REST Url /mobile/users/
-        $postdata = file_get_contents("php://input");
-        $resident = json_decode($postdata);
-//       echo $user->name;
+    case "get cities":
         $ServiceHandler = new ServiceHandler();
-        $ServiceHandler->registerResident($resident);
+        $ServiceHandler->getCities($reqdata);
         break;
-    case "addHistory":
-        // to handle REST Url /mobile/users/
-        $postdata = file_get_contents("php://input");
-        $address = json_decode($postdata);
-//       echo $user->name;
+    case "get stream id":
         $ServiceHandler = new ServiceHandler();
-        $ServiceHandler->addHistory($address);
+        $ServiceHandler->getStreamId($reqdata);
         break;
     case "donation":            //Make donation
         // to handle REST Url /mobile/users/

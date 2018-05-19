@@ -57,10 +57,10 @@ class ServiceHandler extends SimpleRest {
         echo json_encode($response);
     }
 
-    function getSMS() {
+    function getSMS($filter) {
 
         $services = new Services();
-        $rawData = $services->getSMS();
+        $rawData = $services->getSMS($filter);
 
 
         if (empty($rawData)) {
@@ -346,10 +346,10 @@ class ServiceHandler extends SimpleRest {
         echo json_encode($response);
     }
 
-    function getSummaryFromDate($date) {
+    function getAdmittedStatusForStudent($student) {
 
         $services = new Services();
-        $rawData = $services->getSummaryFromDate($date);
+        $rawData = $services->getAdmittedStatusForStudent($student);
 
 
         if (empty($rawData)) {
@@ -368,10 +368,10 @@ class ServiceHandler extends SimpleRest {
         echo json_encode($response);
     }
 
-    function getDatesForSummary() {
+    function getStates() {
 
         $services = new Services();
-        $rawData = $services->getDatesForSummary();
+        $rawData = $services->getStates();
 
 
         if (empty($rawData)) {
@@ -390,10 +390,10 @@ class ServiceHandler extends SimpleRest {
         echo json_encode($response);
     }
 
-    function getYearsForSummary() {
+    function getCities($filter) {
 
         $services = new Services();
-        $rawData = $services->getYearsForSummary();
+        $rawData = $services->getCities($filter);
 
 
         if (empty($rawData)) {
@@ -412,10 +412,10 @@ class ServiceHandler extends SimpleRest {
         echo json_encode($response);
     }
 
-    function getHistoryOfAddress($aid) {
+    function getStreamId($stream) {
 
         $services = new Services();
-        $rawData = $services->getHistoryOfAddress($aid);
+        $rawData = $services->getStreamId($stream);
 
 
         if (empty($rawData)) {
