@@ -126,25 +126,21 @@ switch ($view) {
         $ServiceHandler = new ServiceHandler();
         $ServiceHandler->getStreamId($reqdata);
         break;
-    case "donation":            //Make donation
-        // to handle REST Url /mobile/users/
-        $postdata = file_get_contents("php://input");
-        $donation = json_decode($postdata);
-//       echo $user->name;
+    case "get doc count":            //Make donation
         $ServiceHandler = new ServiceHandler();
-        $ServiceHandler->makeDonation($donation);
+        $ServiceHandler->getDocumentsCompletionStatus($reqdata);
         break;
     case "login" :
         $ServiceHandler = new ServiceHandler();
         $ServiceHandler->login($reqdata);
         break;
-    case "updateFCM" :
+    case "delete document" :
         $ServiceHandler = new ServiceHandler();
-        $ServiceHandler->updateGCM($_GET["mobile"], $_GET["fcmId"]);
+        $ServiceHandler->deleteDocument($reqdata);
         break;
-    case "events":
+    case "change password":
         $ServiceHandler = new ServiceHandler();
-        $ServiceHandler->getEvents();
+        $ServiceHandler->changePasss($reqdata);
         break;
     case "postEvent":
         $postdata = file_get_contents("php://input");

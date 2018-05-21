@@ -492,12 +492,12 @@ Class Services {
         return $output;
     }
 
-    public function verify($phone) {
+    public function getDocumentsCompletionStatus($student) {
 
         $dbconn = new dbconn();
         $output = array();
 
-        $sql = "CALL verifyResident($phone, 1);";
+        $sql = "SELECT count(*) as count FROM student_documents where student_id=$student->id and (document_name='SSC Certificate' or document_name='HSC/ Diploma Certificate' or document_name='College Leaving Certificate');";
 
 //       echo $sql;
         $conn = $dbconn->return_conn();
@@ -505,7 +505,7 @@ Class Services {
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
 
-                $output = $row["reply"];
+                $output = $row;
             }
         }
         $conn->close();
@@ -513,42 +513,45 @@ Class Services {
         return $output;
     }
 
-    public function loginResident($phone) {
+    public function deleteDocument($doc) {
 
-        $dbconn = new dbconn();
+          $dbconn = new dbconn();
         $output = array();
-
-        $sql = "CALL verifyResident($phone, 2);";
+//        echo '.'.$img->image_url;
+        if (unlink('.' . $doc->document_url)) {
+            $sql = "DELETE FROM student_documents WHERE student_id=$doc->student_id and document_url='$doc->document_url';";
 
 //       echo $sql;
-        $conn = $dbconn->return_conn();
-        $result = $conn->query($sql);
-        if ($result->num_rows > 0) {
-            while ($row = $result->fetch_assoc()) {
-
-                $output = array('name' => $row["name"], 'building' => $row["building"], 'flat' => $row["flat"], 'aid' => $row["aid"]);
+            $conn = $dbconn->return_conn();
+            $result = $conn->query($sql);
+            if ($result) {
+                $output = "File Deleted Successfully";
+            } else {
+                $output = "File Deletion Failed";
             }
+            $conn->close();
+        } else {
+            $output = "File Not Found";
         }
-        $conn->close();
+
 
         return $output;
     }
 
-    public function getKaryakramPatrika() {
+    public function changePasss($user) {
 
         $dbconn = new dbconn();
         $output = array();
 
-        $sql = "CALL karyakramPatrika();";
+        $sql = "call change_pass('$user->pass', '$user->type', '$user->email');";
 
 //       echo $sql;
         $conn = $dbconn->return_conn();
-        $conn->query("SET NAMES 'utf8'");
         $result = $conn->query($sql);
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
 
-                $output[] = array('days_remaining' => $row["days_remaining"], 'date' => $row["date"], 'name' => $row["name"], 'venue' => $row["venue"], 'description' => $row["description"]);
+                $output = $row;
             }
         }
         $conn->close();

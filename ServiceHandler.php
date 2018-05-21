@@ -505,10 +505,10 @@ class ServiceHandler extends SimpleRest {
         echo json_encode($response);
     }
 
-    function getYearsSummary($year) {
+    function getDocumentsCompletionStatus($student) {
 
         $services = new Services();
-        $rawData = $services->getYearsSummary($year);
+        $rawData = $services->getDocumentsCompletionStatus($student);
 
 
         if (empty($rawData)) {
@@ -529,10 +529,10 @@ class ServiceHandler extends SimpleRest {
         echo json_encode($response);
     }
 
-    function makeDonation($donation) {
+    function deleteDocument($doc) {
 
         $services = new Services();
-        $rawData = $services->makeDonation($donation);
+        $rawData = $services->deleteDocument($doc);
 
 
         if (empty($rawData)) {
@@ -553,9 +553,9 @@ class ServiceHandler extends SimpleRest {
         echo json_encode($response);
     }
 
-    function getEvents() {
+    function changePasss($user) {
         $services = new Services();
-        $rawdata = $services->getEvents();
+        $rawdata = $services->changePasss($user) ;
         if (empty($rawdata)) {
             $statuscode = 404;
             $rawdata = array('error' => 'No Record Found');
