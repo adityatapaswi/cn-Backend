@@ -7,16 +7,15 @@ $rest = new SimpleRest();
 
 
 $view = "";
-parse_str(file_get_contents("php://input"), $reqdata);             
+parse_str(file_get_contents("php://input"), $reqdata);
 $reqdata = (object) $reqdata;
 
-if (isset($reqdata->view)){
+if (isset($reqdata->view)) {
     $view = $reqdata->view;
 //    echo $view;
-}
-else {
+} else {
     $statusCode = 404;
-    $rawData = array('error' => 'Something Went Wrong!');
+    $rawData = array('error' => 'Wrong Request Format!');
     $response = array('Success' => false, 'Values' => $rawData);
     $requestContentType = 'application/json';
 
@@ -142,17 +141,14 @@ switch ($view) {
         $ServiceHandler = new ServiceHandler();
         $ServiceHandler->changePasss($reqdata);
         break;
-    case "postEvent":
-        $postdata = file_get_contents("php://input");
-        $event = json_decode($postdata);
-        $event->title;
-        // to handle REST Url /mobile/users/
+    case "signup":
+
         $ServiceHandler = new ServiceHandler();
-        $ServiceHandler->postEvent($event);
+        $ServiceHandler->signUp($reqdata);
         break;
-    case "updategcm":
-        $mobileRestHandler = new MobileRestHandler();
-        $mobileRestHandler->updateGcmId($_GET["gcmid"], $_GET["phone"]);
+    case "contact us":
+        $mobileRestHandler = new ServiceHandler();
+        $mobileRestHandler->contactUs($reqdata);
         break;
     case "action":
         // to handle REST Url /mobile/users/

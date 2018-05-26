@@ -571,9 +571,9 @@ class ServiceHandler extends SimpleRest {
         echo json_encode($response);
     }
 
-    function postEvent($event) {
+    function contactUs($msg) {
         $services = new Services();
-        $rawdata = $services->postEvent($event);
+        $rawdata = $services->contactUs($msg);
         if (empty($rawdata)) {
             $statuscode = 404;
             $rawdata = array('error' => 'Operation Failed');

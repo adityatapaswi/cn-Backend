@@ -394,7 +394,7 @@ Class Services {
         if ($result->num_rows > 0) {
             // output data of each row
             while ($row = $result->fetch_assoc()) {
-                $output= $row;
+                $output = $row;
             }
         }
 
@@ -515,7 +515,7 @@ Class Services {
 
     public function deleteDocument($doc) {
 
-          $dbconn = new dbconn();
+        $dbconn = new dbconn();
         $output = array();
 //        echo '.'.$img->image_url;
         if (unlink('.' . $doc->document_url)) {
@@ -659,18 +659,16 @@ Class Services {
         return $output;
     }
 
-    public function postEvent($event) {
+    public function contactUs($msg) {
         $dbconn = new dbconn();
         $output = array();
 
-        $sql = "CALL `postEvent`('$event->date', '$event->time', '$event->title', '$event->description', '$event->address', '$event->status');";
+        $sql = "INSERT INTO `contact_us` (`name`,`email`,`message`,`dte`) VALUES('$msg->name','$msg->email','$msg->msg',now());";
 //        echo $sql;
         $conn = $dbconn->return_conn();
         $result = $conn->query($sql);
-        if ($result->num_rows > 0) {
-            while ($row = $result->fetch_assoc()) {
-                $output = $row["reply"];
-            }
+        if ($result) {
+            $output = "Insertion Success";
         }
         return $output;
     }

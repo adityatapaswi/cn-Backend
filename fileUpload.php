@@ -6,11 +6,11 @@ require_once("dbconn.php");
 require_once("SimpleRest.php");
 
 $simpleRest=new SimpleRest();
-$absUrl = "http://localhost/recom_api/uploads";
 try {
 
     // Undefined | Multiple Files | $_FILES Corruption Attack
     // If this request falls under any of them, treat it invalid.
+	
     if (
             !isset($_FILES['upfile']['error']) ||
             is_array($_FILES['upfile']['error'])
@@ -36,23 +36,24 @@ try {
         throw new RuntimeException('Exceeded filesize limit.');
     }
 
-    // DO NOT TRUST $_FILES['upfile']['mime'] VALUE !!
+      // DO NOT TRUST $_FILES['upfile']['mime'] VALUE !!
     // Check MIME Type by yourself.
-    $finfo = new finfo(FILEINFO_MIME_TYPE);
-    if (false === $ext = array_search(
-            $finfo->file($_FILES['upfile']['tmp_name']), array(
-        'pdf' => 'application/pdf',
-            ), true
-            )) {
+
+    if ($_FILES['upfile']['type'] == 'application/pdf') {
+        $ext = "pdf";
+    } else {
         throw new RuntimeException('PDF File Required.');
     }
-    $fileName = sprintf('/uploads/%s.%s', sha1_file($_FILES['upfile']['tmp_name']), $ext);
+    $fileName = sprintf('/uploads/%s.%s', sha1_file($_FILES['upfile']['tmp_name']) . $_POST['file_name'] . $_POST['sid'], $ext);
+    $fileName = str_replace("/ ", "_", $fileName);
+    $fileName = str_replace(" ", "_", $fileName);
+
     // You should name it uniquely.
     // DO NOT USE $_FILES['upfile']['name'] WITHOUT ANY VALIDATION !!
     // On this example, obtain safe unique name from its binary data.
+
     if (!move_uploaded_file(
-                    $_FILES['upfile']['tmp_name'], sprintf('./uploads/%s.%s', sha1_file($_FILES['upfile']['tmp_name']), $ext
-                    )
+                    $_FILES['upfile']['tmp_name'],'./'.$fileName
             )) {
         throw new RuntimeException('Failed to move uploaded file.');
     }
