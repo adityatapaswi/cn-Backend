@@ -333,19 +333,21 @@ Class Services {
 
     public function getAdmittedStatusForStudent($student) {
         $dbconn = new dbconn();
-        $output = false;
+        $output = 'false';
+
         $sql = "SELECT * FROM admissions where student_id=$student->id;";
+//        echo $sql;
         $conn = $dbconn->return_conn();
         $result = $conn->query($sql);
-
         if ($result->num_rows > 0) {
             // output data of each row
             while ($row = $result->fetch_assoc()) {
 
-                $output = true;
+                $output = 'true';
             }
         }
         $conn->close();
+//        print_r($output);
         return $output;
     }
 
@@ -438,7 +440,7 @@ Class Services {
             'amount' => $paymentObj->amount,
             'phone' => $paymentObj->phone,
             'buyer_name' => $paymentObj->name,
-            'redirect_url' => 'http://localhost:8383/Career%20Navigator/index.html#/paymentRedirect',
+            'redirect_url' => 'http://career-navigator.thesolutioncircle.in/#/paymentRedirect',
             'send_email' => true,
             'webhook' => 'http://career-navigator.thesolutioncircle.in/api/webhook.php',
             'send_sms' => true,
