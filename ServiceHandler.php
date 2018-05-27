@@ -555,7 +555,7 @@ class ServiceHandler extends SimpleRest {
 
     function changePasss($user) {
         $services = new Services();
-        $rawdata = $services->changePasss($user) ;
+        $rawdata = $services->changePasss($user);
         if (empty($rawdata)) {
             $statuscode = 404;
             $rawdata = array('error' => 'No Record Found');
@@ -589,23 +589,44 @@ class ServiceHandler extends SimpleRest {
         echo json_encode($response);
     }
 
-    function getAllUsers($phone) {
+    function getAdmissionsForCourse($course) {
 
-        $mobile = new Mobile();
-        $rawData = $mobile->getAllUsers($phone);
+        $mobile = new Services();
+        $rawData = $mobile->getAdmissionsForCourse($course);
 
 
         if (empty($rawData)) {
             $statusCode = 404;
-            $rawData = array('error' => 'Something Went Wrong!');
+            $rawData = array('error' => 'No Admissions Found!');
             $response = array('Success' => false, 'Values' => $rawData);
         } else {
             $statusCode = 200;
-            $response = array('Success' => true, 'Values' => $rawData);
+            $response = $rawData;
         }
         $requestContentType = 'application/json';
         $this->setHttpHeaders($requestContentType, $statusCode);
+        header("Access-Control-Allow-Origin: *");
 
+
+        echo json_encode($response);
+    }
+    function getResetLinkParams($user) {
+
+        $mobile = new Services();
+        $rawData = $mobile->getResetLinkParams($user);
+
+
+        if (empty($rawData)) {
+            $statusCode = 404;
+            $rawData = array('error' => 'No Admissions Found!');
+            $response = array('Success' => false, 'Values' => $rawData);
+        } else {
+            $statusCode = 200;
+            $response = $rawData;
+        }
+        $requestContentType = 'application/json';
+        $this->setHttpHeaders($requestContentType, $statusCode);
+        header("Access-Control-Allow-Origin: *");
 
 
         echo json_encode($response);

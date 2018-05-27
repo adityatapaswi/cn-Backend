@@ -150,16 +150,16 @@ switch ($view) {
         $mobileRestHandler = new ServiceHandler();
         $mobileRestHandler->contactUs($reqdata);
         break;
-    case "action":
+    case "get admissions for course":
         // to handle REST Url /mobile/users/
-        $mobileRestHandler = new MobileRestHandler();
-        $mobileRestHandler->buddyAction($_GET["userphone"], $_GET["buddyphone"], $_GET["action"]);
+        $mobileRestHandler = new ServiceHandler();
+        $mobileRestHandler->getAdmissionsForCourse($reqdata);
         break;
 
-    case "track":
+    case "get reset link":
         // to handle REST Url /mobile/users/
-        $mobileRestHandler = new MobileRestHandler();
-        $mobileRestHandler->getAllTrackers($_GET["phone"]);
+        $mobileRestHandler = new ServiceHandler();
+        $mobileRestHandler->getResetLinkParams($reqdata);
         break;
 }
 ?>

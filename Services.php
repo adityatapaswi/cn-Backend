@@ -433,6 +433,7 @@ Class Services {
         curl_setopt($ch, CURLOPT_HEADER, FALSE);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_HTTPHEADER, array("X-Api-Key:test_313ce7ed5c23831c755f34228f6",
             "X-Auth-Token:test_8407594df265ec78f711bfd2bee"));
         $payload = Array(
@@ -561,12 +562,12 @@ Class Services {
         return $output;
     }
 
-    public function registerResident($resident) {
+    public function getAdmissionsForCourse($course) {
 
         $dbconn = new dbconn();
         $output = array();
 
-        $sql = "CALL resident_reg('$resident->phone','$resident->name' ,'$resident->email','$resident->building',$resident->flat);";
+        $sql = "SELECT * FROM view_admissions where college_id=$course->cid and stream_id=$course->sid;";
 
         //echo $sql;
         $conn = $dbconn->return_conn();
@@ -574,7 +575,7 @@ Class Services {
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
 
-                $output = array('name' => $row["name"], 'building' => $row["building"], 'flat' => $row["flat"], 'aid' => $row["aid"], 'reply' => $row["reply"]);
+                $output[] = $row;
             }
         }
         $conn->close();
@@ -618,12 +619,12 @@ Class Services {
         }
     }
 
-    public function makeDonation($donation) {
+    public function getResetLinkParams($user) {
 
         $dbconn = new dbconn();
         $output = array();
 
-        $sql = "CALL makeDonation('$donation->payby', '$donation->payTo', '$donation->amt', '$donation->aid','$donation->toEmail','$donation->mobile');";
+        $sql = "select type from login_register where username='$user->email'";
 
 
 //       echo $sql;
@@ -631,12 +632,7 @@ Class Services {
         $result = $conn->query($sql);
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
-                $output = $row["reply"];
-                if (strcmp($output, 'User Already Done Donation') != 0) {
-                    $this->sendMail($donation->toEmail, $donation->amt, $donation->address, $donation->payby, $output, $donation->payTo);
-                    $this->sendMail('gcsmitra.mandal@gmail.com', $donation->amt, $donation->address, $donation->payby, $output, $donation->payTo);
-                    $output = "Payment Registered Successfully";
-                }
+                $output = $row;
             }
         }
         $conn->close();
